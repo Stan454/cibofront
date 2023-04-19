@@ -171,6 +171,7 @@ const Dishes = () => {
                 <input
                     type="text"
                     name="name"
+                    autoCapitalize="words"
                     required="required"
                     placeholder="Enter a name..."
                     onChange={handleFormChange}
@@ -178,6 +179,7 @@ const Dishes = () => {
                 <input
                     type="text"
                     name="description"
+                    autoCapitalize="words"
                     required="required"
                     placeholder="Describe the dish..."
                     onChange={handleFormChange}
