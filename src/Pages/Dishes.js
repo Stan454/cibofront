@@ -5,13 +5,26 @@ import ReadOnlyRow from '../Components/ReadOnlyRow';
 import EditableRow from '../Components/EditableRow';
 
 const Dishes = () => {
-    const [dishes, setdishes] = useState([
+
+    const [dishes, setDishes] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/v1/restaurants/dishes/1/dishes')
+          .then(response => {
+            setDishes(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }, []);
+
+    /*const [dishes, setdishes] = useState([
         { id: 1, name: 'Hamburger', description: 'Better with cheese', price: '12.99'},
         { id: 2, name: 'Spaghetti', description: 'European noodles', price: '10.50'},
         { id: 3, name: 'Chicken', description: 'chicken noises', price: '15.00'},
         { id: 4, name: 'Pizza', description: 'With ananas', price: '9.99'},
         { id: 5, name: 'Meatball', description: 'big one', price: '12.99'}
-    ]);
+    ]);*/
     
     const [addData, setaddData] = useState({
         name:"",
@@ -56,11 +69,24 @@ const Dishes = () => {
             id: nanoid(),
             name: addData.name,
             description: addData.description,
-            price: addData.price
+            price: addData.price,
+            restaurant: {
+                id:1,
+                name:"Test restaurant"
+            }
         };
         
         const newDishes = [...dishes, newDish];
-        setdishes(newDishes);
+        setDishes(newDishes);
+        
+        axios
+        .post('http://localhost:8080/v1/restaurants/dishes/1', newDish)
+        .then((response) => {
+          setDishes([...dishes, response.data]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     const handleEditFormSubmit = (event) => {
@@ -79,7 +105,7 @@ const Dishes = () => {
 
         newDishes[index] = editedDish;
 
-        setdishes(newDishes);
+        setDishes(newDishes);
         setEditDishId(null);
     }
 
@@ -95,18 +121,6 @@ const Dishes = () => {
 
         setEditData(formvalues);
     }
-    /*const [dishes, setDishes] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:8080/dish/getAll')
-          .then(response => {
-            setDishes(response.data);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }, []);*/
-
       const handleCancelClick = () => {
         setEditDishId(null);
       }
@@ -115,7 +129,7 @@ const Dishes = () => {
         const newDishes = [...dishes];
         const index = dishes.findIndex((dish)=> dish.id === dishId);
         newDishes.splice(index, 1); //removes 1 of the index 
-        setdishes(newDishes);
+        setDishes(newDishes);
       }
     
     return (
