@@ -75,9 +75,6 @@ const Dishes = () => {
             }
         };
         
-        const newDishes = [...dishes, newDish];
-        setDishes(newDishes);
-        
         axios
         .post('http://localhost:8080/v1/restaurants/dishes/1', newDish)
         .then((response) => {
