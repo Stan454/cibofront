@@ -18,23 +18,17 @@ const Dishes = () => {
           });
       }, []);
 
-    /*const [dishes, setdishes] = useState([
-        { id: 1, name: 'Hamburger', description: 'Better with cheese', price: '12.99'},
-        { id: 2, name: 'Spaghetti', description: 'European noodles', price: '10.50'},
-        { id: 3, name: 'Chicken', description: 'chicken noises', price: '15.00'},
-        { id: 4, name: 'Pizza', description: 'With ananas', price: '9.99'},
-        { id: 5, name: 'Meatball', description: 'big one', price: '12.99'}
-    ]);*/
-    
     const [addData, setaddData] = useState({
         name:"",
         description:"",
+        dishCategory:0,
         price:""
     })
 
     const [editData, setEditData] = useState({
         name:"",
         description:"",
+        dishCategory:0,
         price:""
     })
 
@@ -68,6 +62,7 @@ const Dishes = () => {
         const newDish = {
             name: addData.name,
             description: addData.description,
+            dishCategory: addData.dishCategory,
             price: addData.price,
             restaurant: {
                 id:1,
@@ -94,6 +89,7 @@ const Dishes = () => {
             id: editDishId,
             name: editData.name,
             description: editData.description,
+            dishCategory: editData.dishCategory,
             price: editData.price
         }
 
@@ -114,6 +110,7 @@ const Dishes = () => {
         const formvalues = {
             name: dish.name,
             description: dish.description,
+            dishCategory: dish.dishCategory,
             price: dish.price
         }
 
@@ -139,6 +136,7 @@ const Dishes = () => {
                     <tr>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Category</th>
                         <th>Price</th>
                         <th>Actions</th>
                     </tr>
@@ -164,7 +162,7 @@ const Dishes = () => {
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colSpan="4">
+                        <td colSpan="5">
                             <div className="links">
                                 <a href="#">&laquo;</a> 
                                 <a className="active" href="#">1</a> 
@@ -196,6 +194,14 @@ const Dishes = () => {
                     placeholder="Describe the dish..."
                     onChange={handleFormChange}
                 />
+                <select
+                name="dishCategory"
+                onChange={handleFormChange}>
+                <option value="0">Drinks</option>
+                <option value="1">Appetizers</option>
+                <option value="2">Main Courses</option>
+                <option value="3">Desserts</option>
+                </select>
                 <input
                     type="number"
                     step="0.01"

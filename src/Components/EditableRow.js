@@ -21,6 +21,17 @@ const EditableRow = ({editData, handleEditFormChange, handleCancelClick}) => {
             value={editData.description}
             onChange={handleEditFormChange}
         /></td>
+        <td>
+            <select
+              name="Category"
+              value={editData.dishCategory}
+              onChange={handleEditFormChange}>
+              <option value="0">Drinks</option>
+              <option value="1">Appetizers</option>
+              <option value="2">Main Courses</option>
+              <option value="3">Desserts</option>
+            </select>
+        </td>
         <td><input
             type="number"
             step="0.01"
