@@ -121,10 +121,15 @@ const Dishes = () => {
       }
 
       const handleDeleteClick = (dishId) => {
-        const newDishes = [...dishes];
-        const index = dishes.findIndex((dish)=> dish.id === dishId);
-        newDishes.splice(index, 1); //removes 1 of the index 
+        axios
+        .delete(`http://localhost:8080/v1/restaurants/dishes/${dishId}`)
+        .then(() => {
+        const newDishes = dishes.filter((dish) => dish.id !== dishId);
         setDishes(newDishes);
+        })
+        .catch((error) => {
+        console.log(error);
+        });
       }
     
     return (
@@ -177,7 +182,7 @@ const Dishes = () => {
             </table>
             </form>
             <h3>Add a new dish</h3>
-            <form onSubmit={handleFormSubmit}>
+            <form id="formS" onSubmit={handleFormSubmit}>
                 <input
                     type="text"
                     name="name"
