@@ -3,10 +3,12 @@ import { Link, useMatch, useResolvedPath } from "react-router-dom"
 export default function NavBar() {
     return (
     <nav className="nav">
-        <Link to="/" classname="site-title">CIBO Admin Panel</Link>
+        <Link to="/" className="site-title">CIBO Admin Panel</Link>
         <ul>
             <CustomLink to="/Dishes">Dishes</CustomLink>
             <CustomLink to="/Reservations">Reservations</CustomLink>
+            <CustomLink to="/Notification">Notifications</CustomLink>
+            <CustomLink to="/Login">Logout</CustomLink>
         </ul>
     </nav>)
 }
