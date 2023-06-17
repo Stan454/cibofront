@@ -7,6 +7,8 @@ export default function NavBar() {
         <ul>
             <CustomLink to="/Dishes">Dishes</CustomLink>
             <CustomLink to="/Reservations">Reservations</CustomLink>
+            <CustomLink to="/Notification">Notifications</CustomLink>
+            <CustomLink to="/Login">Logout</CustomLink>
         </ul>
     </nav>)
 }

@@ -23,9 +23,11 @@ const EditableRow = ({editData, handleEditFormChange, handleCancelClick}) => {
         /></td>
         <td>
             <select
-              name="Category"
+              name="dishCategory"
               value={editData.dishCategory}
-              onChange={handleEditFormChange}>
+              onChange={handleEditFormChange}
+              required>
+              <option value="" disabled selected hidden>Select dish type</option>
               <option value="0">Drinks</option>
               <option value="1">Appetizers</option>
               <option value="2">Main Courses</option>

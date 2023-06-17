@@ -1,20 +1,25 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
-import { nanoid } from 'nanoid';
 import ReadOnlyRow from '../Components/ReadOnlyRow';
 import EditableRow from '../Components/EditableRow';
+import Info from '@mui/icons-material/Info';
 
 const Dishes = () => {
 
     const [dishes, setDishes] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
+        setLoading(true)
         axios.get('http://localhost:8080/v1/restaurants/dishes/1/dishes')
           .then(response => {
             setDishes(response.data);
+            setLoading(false);
           })
           .catch(error => {
-            console.log(error);
+            console.log(error)
+            setLoading(false);
           });
       }, []);
 
@@ -71,15 +76,16 @@ const Dishes = () => {
         };
         
         axios
-        .post('http://localhost:8080/v1/restaurants/dishes/1', newDish)
-        .then((response) => {
-          setDishes([...dishes, response.data]);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-        window.location.reload();
+            .post('http://localhost:8080/v1/restaurants/dishes/1', newDish)
+            .then((response) => {
+                setDishes([...dishes, response.data]);
+                setErrorMessage('');
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+                setErrorMessage('Invalid input, please check info box for instructions');
+            });
     };
 
     const handleEditFormSubmit = (event) => {
@@ -120,20 +126,36 @@ const Dishes = () => {
         setEditDishId(null);
       }
 
-      const handleDeleteClick = (dishId) => {
-        axios
-        .delete(`http://localhost:8080/v1/restaurants/dishes/${dishId}`)
-        .then(() => {
-        const newDishes = dishes.filter((dish) => dish.id !== dishId);
-        setDishes(newDishes);
-        })
-        .catch((error) => {
-        console.log(error);
-        });
-      }
+      const handleDeleteClick = (dishId, dishName) => {
+        const shouldDelete = window.confirm(`Do you want to delete the dish: "${dishName}?`);
+      
+            if (shouldDelete) {
+            axios
+                .delete(`http://localhost:8080/v1/restaurants/dishes/${dishId}`)
+                .then(() => {
+                const newDishes = dishes.filter((dish) => dish.id !== dishId);
+                setDishes(newDishes);
+                })
+                .catch((error) => {
+                console.log(error);
+                });
+            }
+        };
     
     return (
+        
         <div className="container">
+            <div className="information-section">
+                <h1><Info /> Information </h1>               
+                <p>On this page you can manage your restaurant's menu by adding, deleting and editing dishes in the "Current Dishes" section.</p>
+                <p>To add a new dish go to the "Add a new dish section"</p>
+            </div>
+            {loading ? (
+                <div className="loading-icon">
+                <div className="loader"></div>
+              </div>
+            ) : (
+            <div>
             <h3 className="p-3 text-center">Current Dishes</h3>
             <form onSubmit={handleEditFormSubmit}>
             <table className="blueTable">
@@ -181,7 +203,17 @@ const Dishes = () => {
                 </tfoot>
             </table>
             </form>
-            <h3>Add a new dish</h3>
+            </div>
+            )}
+            <div className="information-section">
+                <h3>Add a new dish</h3>               
+                <p>To add a new dish to your menu fill in the following fields</p><br/>
+                <p>Field 1 Name: Fill in the name of your new dish in max 10 words and only letters.</p>
+                <p>Field 2 Description: Describe the dish in max 30 words and only letters</p>
+                <p>Field 3 Category: Choose the type of dish from the dropdownbox</p>
+                <p>Field 4 Price: Choose a price for the dish</p>
+                <p>When all the fields are filled, press the "Add dish" button to save your input</p>
+            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
             <form id="formS" onSubmit={handleFormSubmit}>
                 <input
                     type="text"
@@ -189,6 +221,7 @@ const Dishes = () => {
                     autoCapitalize="words"
                     required="required"
                     placeholder="Enter a name..."
+                    
                     onChange={handleFormChange}
                 />
                 <input
@@ -199,14 +232,17 @@ const Dishes = () => {
                     placeholder="Describe the dish..."
                     onChange={handleFormChange}
                 />
-                <select
+               <select
                 name="dishCategory"
+                required
                 onChange={handleFormChange}>
+                <option value="" disabled selected hidden>Select dish type</option>
                 <option value="0">Drinks</option>
                 <option value="1">Appetizers</option>
                 <option value="2">Main Courses</option>
                 <option value="3">Desserts</option>
                 </select>
+
                 <input
                     type="number"
                     step="0.01"
@@ -218,6 +254,7 @@ const Dishes = () => {
                 />
                 <button type="submit">Add dish</button>
             </form>
+        </div>
         </div>
 
     );
